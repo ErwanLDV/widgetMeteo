@@ -8,7 +8,19 @@ function Widget({ city, zipcode }) {
   const [desc, setDesc] = useState('');
 
   useEffect(() => {
-    const API_KEY = '6bbe3a08de09226673c51d8cff9deaec';
+    const API_KEY = process.env.REACT_APP_API_KEY;
+
+    /*
+    si je suis en dev j'interroge urlAPIdev
+    si je suis en prod j'interroge urlAPIprod
+    */
+    let urlAPI;
+    if(process.env.NODE_ENV === 'development') {
+      urlAPI = process.env.REACT_APP_API_URL_PROD;
+    }
+    else if(process.env.NODE_ENV === 'production') {
+      urlAPI = process.env.REACT_APP_API_URL_DEV;
+    }
     // appel API 
     axios.get(`https://api.openweathermap.org/data/2.5/weather?zip=${zipcode},fr&appid=${API_KEY}&units=metric`)
       .then((response) => {
